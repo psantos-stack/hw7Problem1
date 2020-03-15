@@ -23,9 +23,7 @@ public class ArrayDictionary implements Dictionary {
 
     @Override
     public boolean add(int key, int value) {
-
         int hashedKey = hashFunction(key);
-
         // when there's no entry yet
         if (entries[hashedKey] == null) {
             if (count == capacity) {
@@ -35,7 +33,6 @@ public class ArrayDictionary implements Dictionary {
             count++;
             return true;
         }
-
         KVEntry ptr = entries[hashedKey];
         KVEntry pNewNode = null;
         while (ptr != null) {
@@ -47,9 +44,9 @@ public class ArrayDictionary implements Dictionary {
             pNewNode = ptr;
             ptr = ptr.next;
         }
-
         // add an entry to the end of the chain
         pNewNode.next = new KVEntry(key, value);
+
         return true;
     }
 
@@ -58,7 +55,32 @@ public class ArrayDictionary implements Dictionary {
     @Override
     public boolean remove(int key) {
         // homework
-        return false;
+        boolean operationSuccessful = false;
+        if(capacity!=0) {
+            int hashedKey = hashFunction(key);
+            KVEntry valueToBeRemoved = entries[hashedKey];
+            if (valueToBeRemoved != null) {
+                //System.out.print(valueToBeRemoved.key + ", ");
+                if (valueToBeRemoved.key == key) {
+                    entries[hashedKey] = entries[hashedKey].next;
+                    operationSuccessful = true;
+                } else {
+                    while (valueToBeRemoved.next != null) {
+                        if (valueToBeRemoved.next.key == key) {
+                            //System.out.print(valueToBeRemoved.next.key + ", ");
+                            valueToBeRemoved.next = valueToBeRemoved.next.next;
+                            operationSuccessful = true;
+                            break;
+                        } else {
+                            valueToBeRemoved = valueToBeRemoved.next;
+                            //System.out.print(valueToBeRemoved.key + ", ");
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println();
+        return operationSuccessful;
     }
 
     // Return true when the dictionary contains an entry
@@ -66,7 +88,30 @@ public class ArrayDictionary implements Dictionary {
     @Override
     public boolean contains(int key) {
         // homework
-        return false;
+        boolean contains = false;
+        if(capacity!=0) {
+            int hashedKey = hashFunction(key);
+            KVEntry valueChecked = entries[hashedKey];
+            if (valueChecked != null) {
+                //System.out.print(valueChecked.key + ", ");
+                if (valueChecked.key == key) {
+                    contains = true;
+                } else {
+                    while (valueChecked.next != null) {
+                        if (valueChecked.next.key == key) {
+                            //System.out.print(valueChecked.next.key + ", ");
+                            contains = true;
+                            break;
+                        } else {
+                            valueChecked = valueChecked.next;
+                            //System.out.print(valueChecked.key + ", ");
+                        }
+                    }
+                }
+            }
+            System.out.println();
+        }
+        return contains;
     }
 
     // Return the entry value with the given key
